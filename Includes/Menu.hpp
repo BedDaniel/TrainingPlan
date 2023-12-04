@@ -1,4 +1,4 @@
-
+#include "../Includes/TrainingPlan.hpp"
 
 class Menu{
 public:
@@ -6,6 +6,7 @@ public:
     void runMenu();
 
 private:
+    TrainingPlan plan;
     void printMenu();
     void Menu_Add();
     
@@ -15,5 +16,8 @@ private:
 
     void Menu_LoadSavedFile();
     void showSavedFiles();
+
+    void validateUserInput(size_t & choice);
+
 
 };
