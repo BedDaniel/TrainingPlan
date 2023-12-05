@@ -11,13 +11,13 @@ void Menu::printMenu(){
                  ". Show the whole training plan";
                  ". Show selected training day";
                  ". Delete exercises from plan";
-                 ". Edit exercises from plan";
+                 ". Edit exercises from plan"; // name, reps, sets or laod
                  ". Add new training day";
                  ". Extract training plan to excel file";
                  ". ";
 }
 
-void Menu::validateUserInput(size_t & choice){
+    void Menu::validateUserInput(size_t & choice){
     while(!(std::cin>>choice))
     {
         std::cout << "Please enter numbers only!\n";
@@ -27,6 +27,7 @@ void Menu::validateUserInput(size_t & choice){
 }
 
 void Menu::Menu_Add(){
+
     std::string name_;
     size_t sets_; size_t reps_; 
     float weight_;
@@ -68,4 +69,9 @@ void Menu::Menu_Add(){
         }
 
     }
+}
+
+void Menu::runMenu(){
+    //size_t choice;
+
 }

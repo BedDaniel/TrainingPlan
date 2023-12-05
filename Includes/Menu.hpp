@@ -1,9 +1,11 @@
 #include "../Includes/TrainingPlan.hpp"
+#include "../Includes/Exercises.hpp"
 
 class Menu{
 public:
     Menu() {}
     void runMenu();
+    static void validateUserInput(size_t & choice);
 
 private:
     TrainingPlan plan;
@@ -17,7 +19,6 @@ private:
     void Menu_LoadSavedFile();
     void showSavedFiles();
 
-    void validateUserInput(size_t & choice);
 
 
 };
