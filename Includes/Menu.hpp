@@ -1,5 +1,6 @@
+#pragma once
 #include "../Includes/TrainingPlan.hpp"
-#include "../Includes/Exercises.hpp"
+//#include "../Includes/Exercises.hpp"
 
 class Menu{
 public:
@@ -11,14 +12,11 @@ private:
     TrainingPlan plan;
     void printMenu();
     void Menu_Add();
-    
 
     void Menu_SaveToFile();
     void Menu_LoadFromFile();
 
     void Menu_LoadSavedFile();
     void showSavedFiles();
-
-
 
 };

@@ -1,4 +1,4 @@
-#include "../Includes/TrainingPlan.hpp"
+#include "../Includes/Menu.hpp"
 
 int main(){
     TrainingPlan plan;

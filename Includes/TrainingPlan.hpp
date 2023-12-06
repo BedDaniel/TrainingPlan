@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include "../Includes/Exercises.hpp"
-#include "../Includes/Menu.hpp"
+//#include "../Includes/Menu.hpp"
 
 class TrainingPlan{
 public:
@@ -14,8 +14,10 @@ public:
     std::vector<std::string> getFIleNames() const { return fileName_; };
     void editExercise();
 
+    std::vector<std::shared_ptr<Exercise>> getExercise() const { return exercises_; } // Only for tests!
+
 private:
-    std::vector<std::shared_ptr<Exercise>> exercises_;
+    std::vector<std::shared_ptr<Exercise>>exercises_;
 
     std::vector<std::string> fileName_;
 

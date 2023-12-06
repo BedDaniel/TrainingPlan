@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-#include "../Includes/TrainingPlan.hpp"
-#include "../Includes/Menu.hpp"
+//#include "../Includes/TrainingPlan.hpp"
+//#include "../Includes/Menu.hpp"
 
 class Exercise{
 public:
