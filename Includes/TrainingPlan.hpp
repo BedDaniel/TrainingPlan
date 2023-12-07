@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <algorithm>
 #include "../Includes/Exercises.hpp"
 //#include "../Includes/Menu.hpp"
 
@@ -13,6 +14,8 @@ public:
     void displayPlan() const;
     std::vector<std::string> getFIleNames() const { return fileName_; };
     void editExercise();
+
+    void removeExercise(int choice);
 
     std::vector<std::shared_ptr<Exercise>> getExercise() const { return exercises_; } // Only for tests!
 

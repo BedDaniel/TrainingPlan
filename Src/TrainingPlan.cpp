@@ -89,3 +89,18 @@ void TrainingPlan::editExercise(){
     }
     while(choice != 0);
 }
+
+void TrainingPlan::removeExercise(int choice){
+    // size_t choice = 1;                           Add this to Menu.cpp
+    // system("cls");
+    // std::cout << "\nWhich exercise do you want to delete?\n";
+    // displayPlan();
+    // std::cout << "\nInsert number from 1 - " << exercises_.size() << ": ";
+    // Menu::validateUserInput(choice);
+    if(choice > exercises_.size()) { std::cout << "\nPlan does not have that exercise! Insert correct number!\n"; }
+    else
+    {
+        auto iteratorToRemove = exercises_.begin() + choice - 1;
+        exercises_.erase(iteratorToRemove);
+    }
+}
