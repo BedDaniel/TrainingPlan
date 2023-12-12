@@ -21,21 +21,6 @@ TEST_F(TrainingPlanFixture, addExerciseTest){
     EXPECT_EQ(vec.size(), 4);
 }
 
-// TEST_F(TrainingPlanFixture, displayExerciseInfoTest){
-//     auto vec = plan.getExercise();
-//     EXPECT_EQ(vec[1], 4);
-// }
-
-TEST_F(TrainingPlanFixture, removeExerciseTest){
-    int choice = 1;
-    auto vec = plan.getExercise();
-    //EXPECT_EQ(vec.size(), 4);
-    plan.removeExercise(2);
-    // std::remove(vec.begin(), vec.end(), choice-1);
-    // auto newEnd = std::remove(vec.begin(), vec.end(), choice-1);
-    // vec.erase(newEnd, vec.end());
-    EXPECT_EQ(plan.getExercise().size(), 3);
-}
 TEST_F(TrainingPlanFixture, removeExerciseTest2) {
     plan.removeExercise(2);
     EXPECT_EQ(plan.getExercise().size(), 3);

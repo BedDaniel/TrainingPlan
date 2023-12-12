@@ -23,16 +23,11 @@ public:
 
     void displayExerciseInfo() const;
     
-
-
-
 private:
     std::string name_;
     size_t sets_;
     size_t reps_;
     float weight_;
-
-
 };
 
 

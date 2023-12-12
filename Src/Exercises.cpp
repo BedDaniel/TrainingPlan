@@ -1,7 +1,5 @@
 #include "../Includes/Exercises.hpp"
 
-
-
 #include <iostream>
 
 Exercise::Exercise() {}
