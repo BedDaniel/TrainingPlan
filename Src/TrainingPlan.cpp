@@ -11,9 +11,8 @@
 // }
 
 void TrainingPlan::makeWorkoutDay(const std::string& name) {
-    std::vector<std::shared_ptr<Exercise>> WorkoutDay;
-    trainingDays_.push_back(std::make_shared<TrainingDay>(name, WorkoutDay));
-    // return workoutDay;
+    std::vector<std::shared_ptr<Exercise>> emptyExercises;
+    trainingDays_.push_back(std::make_shared<TrainingDay>(name, emptyExercises));
 }
 
 void TrainingPlan::displayTrainingDays() const {

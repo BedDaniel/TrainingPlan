@@ -6,6 +6,7 @@
 
 class TrainingDay{
 public:
+    TrainingDay(){};
     TrainingDay(const std::string& name, const std::vector<std::shared_ptr<Exercise>>& exercises)
             : workoutDayName_(name), exercises_(exercises) {}
 

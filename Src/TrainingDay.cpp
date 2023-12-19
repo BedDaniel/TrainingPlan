@@ -30,5 +30,6 @@ void TrainingDay::swapExercises(int oldPosition, int newPosition) {
 }
 
 void TrainingDay::addExercise(const std::string & name, size_t sets, size_t reps, float weight){
+    std::cout << "Adding exercise: " << name << std::endl;
     exercises_.push_back(std::make_shared<Exercise>(name, sets, reps, weight));
 }
