@@ -1,7 +1,7 @@
 #include "../Includes/TrainingDay.hpp"
 #include <iostream>
 
-void TrainingDay::display() const {
+void TrainingDay::displayTrainingDay() const {
     std::cout << "Workout Day: " << workoutDayName_ << "\n";
     
     if (exercises_.empty()) {
@@ -9,13 +9,11 @@ void TrainingDay::display() const {
     } else {
         std::cout << "Exercises:\n";
         for (const auto& exercise : exercises_) {
-            std::cout << "  - " << exercise->getName() << " (Sets: " << exercise->getSets()
-                      << ", Reps: " << exercise->getReps() << ", Weight: " << exercise->getWeight() << ")\n";
+            exercise->displayExerciseInfo();
         }
     }
     std::cout << "\n";
 }
-
 
 void TrainingDay::removeExercise(int choice){
         auto iteratorToRemove = exercises_.begin() + choice - 1;

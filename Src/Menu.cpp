@@ -26,50 +26,51 @@ void Menu::printMenu(){
     }
 }
 
-void Menu::Menu_Add(){
 
-    std::string name_;
-    size_t sets_; size_t reps_; 
-    float weight_;
+// void Menu::Menu_AddExerciseToTrainingDay(){
 
-    size_t choice = 1;
-    char c;
+//     std::string name_;
+//     size_t sets_; size_t reps_; 
+//     float weight_;
 
-    std::cout << "1. Add exercise \n"
-                 "0. EXIT \n";
+//     size_t choice = 1;
+//     char c;
 
-    while(choice != 0)
-    {
-        std::cout << "\nInsert number 1 or 0\n";
-        validateUserInput(choice);
-        std::cin.ignore();
+//     std::cout << "1. Add exercise \n"
+//                  "0. EXIT \n";
 
-        switch(choice)
-        {
-        case 1:
-            system("cls");
-            std::cout << "\nName of the exercises: ";
-            std::getline(std::cin, name_);
-            system("cls");
-            std::cout << "\nNumber of sets: ";
-            std::cin >> sets_;
-            system("cls");
-            std::cout << "\nNumber of reps: ";
-            std::cin >> reps_;
-            system("cls");
-            std::cout << "\nWeight: ";
-            std::cin >> weight_;
-            system("cls");
-            plan.addExercise(name_, sets_, reps_, weight_);
-            choice = 0;
-            break;
-        case 2:
-            std::cout << '\n' << "BYE BYE BYE" << std::endl;
-            break;
-        }
+//     while(choice != 0)
+//     {
+//         std::cout << "\nInsert number 1 or 0\n";
+//         Menu::validateUserInput(choice);
+//         std::cin.ignore();
 
-    }
-}
+//         switch(choice)
+//         {
+//         case 1:
+//             system("cls");
+//             std::cout << "\nName of the exercises: ";
+//             std::getline(std::cin, name_);
+//             system("cls");
+//             std::cout << "\nNumber of sets: ";
+//             std::cin >> sets_;
+//             system("cls");
+//             std::cout << "\nNumber of reps: ";
+//             std::cin >> reps_;
+//             system("cls");
+//             std::cout << "\nWeight: ";
+//             std::cin >> weight_;
+//             system("cls");
+//             plan.addExercise(name_, sets_, reps_, weight_);
+//             choice = 0;
+//             break;
+//         case 2:
+//             std::cout << '\n' << "BYE BYE BYE" << std::endl;
+//             break;
+//         }
+
+//     }
+// }
 
 void Menu::runMenu(){
     //size_t choice;

@@ -3,14 +3,13 @@
 #include <vector>
 #include <memory>
 
-using Exercises = std::shared_ptr<Exercise>; 
 
 class TrainingDay{
 public:
-    TrainingDay(const std::string& name, const std::vector<Exercises>& exercises)
+    TrainingDay(const std::string& name, const std::vector<std::shared_ptr<Exercise>>& exercises)
             : workoutDayName_(name), exercises_(exercises) {}
 
-    void TrainingDay::display() const;
+    void displayTrainingDay() const;
 
     void removeExercise(int choice);
 
@@ -21,11 +20,11 @@ public:
     void setWorkoutDayName(std::string newDayName) { workoutDayName_ = newDayName; }
 
     std::string getWorkoutDayName()       const { return workoutDayName_;}
-    std::vector<Exercises> getExercises() const { return exercises_;}
+    std::vector<std::shared_ptr<Exercise>> getExercises() const { return exercises_;}
 
 private:
     std::string workoutDayName_;
-    std::vector<Exercises> exercises_;
+    std::vector<std::shared_ptr<Exercise>> exercises_;
 };
 
 

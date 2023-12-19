@@ -10,26 +10,32 @@
 
 class TrainingPlan{
 public:
+    TrainingPlan(){};
+    TrainingPlan(const std::vector<std::shared_ptr<TrainingDay>> & trainingDays) : trainingDays_(trainingDays) {};
+
     std::shared_ptr<TrainingDay> makeWorkoutDay(const std::string& name, const std::vector<std::shared_ptr<Exercise>>& exercises);
+    
+    void makeWorkoutDay(const std::string& name);
+
     void displayTrainingDays() const;
+    void displayTrainingDaysWithExercises() const;
 
-    TrainingPlan();
-    // Zrobione
-    void displayPlan() const;
+    void removeTrainingDay(int pos);
 
-    void editExercise();
+    // void displayPlan() const;
+
+    // void editExercise();
     // Do zrobienia:
 
     std::vector<std::string> getFIleNames() const { return fileName_; };
 
 
-    //std::vector<std::shared_ptr<Exercise>> getExercise() const { return exercises_; } // Only for tests!
+    std::vector<std::shared_ptr<TrainingDay>> getTrainingDays () const { return trainingDays_; }
 
 private:
 
     std::vector<std::shared_ptr<TrainingDay>> trainingDays_;
 
     std::vector<std::string> fileName_;
-
 };
 

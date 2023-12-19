@@ -16,9 +16,9 @@ FetchContent_MakeAvailable(googletest)
 project(WorkoutPlan)
 enable_testing()
 
-add_executable(${PROJECT_NAME} Src/main.cpp Src/TrainingPlan.cpp Src/Menu.cpp Src/Exercises.cpp)
+add_executable(${PROJECT_NAME} Src/main.cpp Src/TrainingPlan.cpp Src/Menu.cpp Src/Exercises.cpp Src/TrainingDay.cpp)
 
-add_executable(${PROJECT_NAME}-ut Tests/Test.cpp Src/TrainingPlan.cpp Src/Menu.cpp Src/Exercises.cpp)
+add_executable(${PROJECT_NAME}-ut Tests/Test.cpp Src/TrainingPlan.cpp Src/Menu.cpp Src/Exercises.cpp Src/TrainingDay.cpp)
 
 target_link_libraries(${PROJECT_NAME}-ut gtest_main)
 
