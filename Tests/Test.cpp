@@ -8,8 +8,11 @@
 struct TrainingPlanFixture : public ::testing::Test{
     TrainingPlan plan;
     TrainingDay day;
-    // void SetUp() override{
-
+    TrainingDay day2;
+    void SetUp() override{
+        day2.addExercise("Squats", 3, 12, 50.0f);
+        day2.addExercise("Pullups", 3, 10, 0.0f);
+        day2.addExercise("Pushups", 4, 15, 0.0f);
     // plan.makeWorkoutDay("Poniedzialek");
     // auto& workoutDay = plan.getTrainingDays()[0];
     // workoutDay->addExercise("Squats", 2, 0, 50.f);
@@ -21,7 +24,7 @@ struct TrainingPlanFixture : public ::testing::Test{
     // workoutDay2->addExercise("Dips", 5, 4, 30.f);
     // workoutDay2->addExercise("DB Press", 5, 7, 10.f);
     // workoutDay2->addExercise("Chin Ups", 4, 6, 20.f);
-    // }
+    }
 };
 
 // struct TrainingDayFixture : public ::testing::Test{
@@ -76,6 +79,28 @@ TEST_F(TrainingPlanFixture, AddExercise_Test) {
     EXPECT_EQ(addedExercise2->getWeight(), weight2);
 }
 
+TEST_F(TrainingPlanFixture, RemoveExercise_RemovesExerciseCorrectly) {
+    day2.removeExercise(1); // Usuwanie drugiego ćwiczenia (Pullups)
+
+    auto exercises = day2.getExercises();
+    ASSERT_EQ(exercises.size(), 2); // Powinny pozostać tylko dwa ćwiczenia
+
+    EXPECT_EQ(exercises[0]->getName(), "Squats");
+    EXPECT_EQ(exercises[1]->getName(), "Pushups");
+}
+
+// Testuje, czy swapExercises poprawnie zamienia ćwiczenia miejscami
+TEST_F(TrainingPlanFixture, SwapExercises_SwapsExercisesCorrectly) {
+    day2.swapExercises(0, 2); // Zamiana miejscami Squats i Pushups
+
+    auto exercises = day2.getExercises();
+    EXPECT_EQ(exercises[0]->getName(), "Pushups");
+    EXPECT_EQ(exercises[2]->getName(), "Squats");
+}
+
+
+
+
 // TEST_F(TrainingPlanFixture, Make_Workout_Day_Test){
 //     auto& workoutDay = plan.getTrainingDays()[0];
 //     EXPECT_TRUE(workoutDay);
@@ -97,12 +122,6 @@ TEST_F(TrainingPlanFixture, AddExercise_Test) {
 
 //     // Sprawdź, czy ćwiczenia zostały dodane do "Czwartek"
 //     //EXPECT_EQ(workoutDay2->getExercises().size(), 3);
-// }
-
-
-// TEST_F(TrainingPlanFixture, addExerciseTest){
-//     auto vec = plan.getExercise();
-//     EXPECT_EQ(vec.size(), 4);
 // }
 
 // TEST_F(TrainingPlanFixture, removeExerciseTest2) {
