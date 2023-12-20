@@ -1,9 +1,8 @@
 #include "../Includes/Menu.hpp"
 
 int main(){
-    TrainingPlan plan;
-    //plan.addExercise("Squats", 2, 6, 50.f);
-    //plan.displayPlan();
-
+    Menu menu;
+    menu.runMenu();
+    
     return 0;
 }

@@ -34,8 +34,6 @@ struct TrainingPlanFixture : public ::testing::Test{
 TEST_F(TrainingPlanFixture, MakeWorkoutDay_Correct_Size_And_Name_Test) {
     std::string expectedDayName = "TestDay";
     plan.makeWorkoutDay(expectedDayName);
-    // plan.makeWorkoutDay("Poniedzialek");
-
 
     auto trainingDays = plan.getTrainingDays();
     ASSERT_EQ(trainingDays.size(), 1);
@@ -80,18 +78,17 @@ TEST_F(TrainingPlanFixture, AddExercise_Test) {
 }
 
 TEST_F(TrainingPlanFixture, RemoveExercise_RemovesExerciseCorrectly) {
-    day2.removeExercise(1); // Usuwanie drugiego ćwiczenia (Pullups)
+    day2.removeExercise(1); // Remove Pullups
 
     auto exercises = day2.getExercises();
-    ASSERT_EQ(exercises.size(), 2); // Powinny pozostać tylko dwa ćwiczenia
+    ASSERT_EQ(exercises.size(), 2);
 
     EXPECT_EQ(exercises[0]->getName(), "Squats");
     EXPECT_EQ(exercises[1]->getName(), "Pushups");
 }
 
-// Testuje, czy swapExercises poprawnie zamienia ćwiczenia miejscami
 TEST_F(TrainingPlanFixture, SwapExercises_SwapsExercisesCorrectly) {
-    day2.swapExercises(0, 2); // Zamiana miejscami Squats i Pushups
+    day2.swapExercises(0, 2); 
 
     auto exercises = day2.getExercises();
     EXPECT_EQ(exercises[0]->getName(), "Pushups");
