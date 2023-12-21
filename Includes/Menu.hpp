@@ -11,11 +11,11 @@ private:
     TrainingPlan plan;
     void printMenu();
 
-    void Menu_ShowTrainingPlan(){};
+    void Menu_ShowTrainingPlan();
 
     void Menu_Add();
-    void Menu_AddExerciseToTrainingDay(){};
-    void Menu_AddTrainingday(){};
+    void Menu_AddExerciseToTrainingDay();
+    void Menu_AddTrainingday();
 
     void Menu_Remove();
     void Menu_RemoveExerciseFromTrainingDay(){};

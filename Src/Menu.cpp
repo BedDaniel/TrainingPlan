@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+#include <limits>
 
 
     void Menu::validateUserInput(size_t & choice){
@@ -13,6 +14,57 @@
     }
 }
 
+void Menu::Menu_ShowTrainingPlan(){
+    plan.displayTrainingDaysWithExercises();
+    std::cin.get();
+}
+
+void Menu::Menu_AddTrainingday(){
+    system("clear");
+    std::string name;
+    std::cout << "What is the name of you new training day?\n"
+                 "Enter the name: "; std::cin >> name;
+    plan.makeWorkoutDay(name);        
+    system("clear");
+    std::cout << "You have just created \"" << name << "\" training day!\n";
+    std::cout << "\nPress enter to back to menu...\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get(); 
+
+}
+
+void Menu::Menu_AddExerciseToTrainingDay(){
+    if(plan.getTrainingDays().empty()) 
+    {
+                    while (true){
+                    char answer;
+        system("clear");
+        std::cout << "There is no any training day!\n"
+                     "Do you want to create a new one ([Y] - yes | [N] - no)?"; std::cin >> answer;
+                    switch(answer)
+                    {
+                    case 'Y' or 'y': Menu_AddTrainingday(); break;
+                    case 'N' or 'n': break; 
+                    default:
+                        std::cout << "\nYou entered wrong answer (write y or n)!\n";
+                    }
+                    }
+    }
+    else
+    {   
+        system("clear");
+        size_t choice;
+        plan.displayTrainingDays();
+        std::cout << "Select training day to which you want to add exercise: "; std::cin >> choice;
+        validateUserInput(choice);
+        if((choice-1) >= plan.getTrainingDays().size() and (choice-1) <= plan.getTrainingDays().size())
+        {
+            
+        }
+    }
+
+
+}
 
 // void Menu::Menu_AddExerciseToTrainingDay(){
 
@@ -79,7 +131,7 @@ void Menu::runMenu(){
     // plan.loadSavedTrainingPlan(); 
     do
     {
-        system("cls");
+        system("clear");
         std::cout << "1. Create new training plan\n";
         std::cout << "2. Load training plan\n";
         std::cout << "0. EXIT\n";
@@ -109,7 +161,7 @@ void Menu::runMenu(){
         }
     } while (choice < 0 or choice > 2);
 
-    choice = 1;
+    choice = 100;
 
     while(choice != 0)
     {

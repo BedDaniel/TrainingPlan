@@ -2,13 +2,8 @@
 #include "../Includes/Menu.hpp"
 #include "../Includes/TrainingDay.hpp"
 #include <iostream>
+#include <limits>
  
-
-// std::shared_ptr<TrainingDay> TrainingPlan::makeWorkoutDay(const std::string& name, const std::vector<std::shared_ptr<Exercise>>& exercises) {
-//     auto workoutDay = std::make_shared<TrainingDay>(name, exercises);
-//     trainingDays_.push_back(workoutDay);
-//     return workoutDay;
-// }
 
 void TrainingPlan::makeWorkoutDay(const std::string& name) {
     std::vector<std::shared_ptr<Exercise>> emptyExercises;
@@ -16,14 +11,28 @@ void TrainingPlan::makeWorkoutDay(const std::string& name) {
 }
 
 void TrainingPlan::displayTrainingDays() const {
+    int num = 1;
     for (const auto& trainingDay : trainingDays_) {
-        trainingDay->getWorkoutDayName();
+        std::cout << num << ". " << trainingDay->getWorkoutDayName() << '\n';
+        ++num;
     }
 }
 
 void TrainingPlan::displayTrainingDaysWithExercises() const {
-    for (const auto& trainingDay : trainingDays_) {
-        trainingDay->displayTrainingDay(); 
+    if(trainingDays_.empty()) 
+        { 
+        std::cout << "Plan is empty! You have to add new training day first!\n";
+        std::cout << "\nPress enter to back to menu...\n";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        // std::cin.get(); 
+        }
+    
+    else
+    {
+        for (const auto& trainingDay : trainingDays_) 
+        {
+            trainingDay->displayTrainingDay(); 
+        }
     }
 }
 
