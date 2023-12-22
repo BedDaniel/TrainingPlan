@@ -19,22 +19,12 @@ void TrainingPlan::displayTrainingDays() const {
 }
 
 void TrainingPlan::displayTrainingDaysWithExercises() const {
-    if(trainingDays_.empty()) 
-        { 
-        std::cout << "Plan is empty! You have to add new training day first!\n";
-        std::cout << "\nPress enter to back to menu...\n";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        // std::cin.get(); 
-        }
-    
-    else
+    for (const auto& trainingDay : trainingDays_) 
     {
-        for (const auto& trainingDay : trainingDays_) 
-        {
-            trainingDay->displayTrainingDay(); 
-        }
+        trainingDay->displayTrainingDay(); 
     }
 }
+
 
 void TrainingPlan::removeTrainingDay(int pos) {
     auto iteratorToRemove = trainingDays_.begin() + pos - 1;
