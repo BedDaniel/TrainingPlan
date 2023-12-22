@@ -36,34 +36,61 @@ void Menu::Menu_AddTrainingday(){
 void Menu::Menu_AddExerciseToTrainingDay(){
     if(plan.getTrainingDays().empty()) 
     {
-                    while (true){
-                    char answer;
-        system("clear");
-        std::cout << "There is no any training day!\n"
-                     "Do you want to create a new one ([Y] - yes | [N] - no)?"; std::cin >> answer;
-                    switch(answer)
-                    {
-                    case 'Y' or 'y': Menu_AddTrainingday(); break;
-                    case 'N' or 'n': break; 
-                    default:
-                        std::cout << "\nYou entered wrong answer (write y or n)!\n";
-                    }
-                    }
+        while (true)
+        {
+            char answer;
+            system("clear");
+            std::cout << "There is no any training day!\n"
+             "Do you want to create a new one ([Y] - yes | [N] - no)?"; std::cin >> answer;
+            switch(answer)
+            {
+                case 'Y':
+                case 'y': Menu_AddTrainingday(); break;
+
+                case 'N':
+                case 'n': return; 
+
+                default: std::cout << "\nYou entered wrong answer (write y or n)!\n"; break;
+            }
+        }
     }
     else
     {   
         system("clear");
         size_t choice;
+        std::string name;
+        size_t sets; size_t reps;
+        float weight;
+
         plan.displayTrainingDays();
         std::cout << "Select training day to which you want to add exercise: "; std::cin >> choice;
         validateUserInput(choice);
-        if((choice-1) >= plan.getTrainingDays().size() and (choice-1) <= plan.getTrainingDays().size())
+        if(choice >= 1 and choice <= plan.getTrainingDays().size())
         {
-            
+            std::cout << "You will add exercise to: " << plan.getTrainingDays()[choice-1]->getWorkoutDayName() << '\n';
+            std::cout << "Exercise's name: "; std::cin >> name;
+            std::cout << "Number of sets: "; std::cin >> sets;
+            std::cout << "Number of reps:: "; std::cin >> reps;
+            std::cout << "Amount of load: "; std::cin >> weight;
+
+            if (sets <= 0 || reps <= 0 || weight <= 0) 
+            {
+                std::cout << "Invalid input. Sets, reps, and weight must be positive values.\n";
+            }
+            else{
+            plan.getTrainingDays()[choice-1]->addExercise(name, sets, reps, weight);
+            system("clear");
+            std::cout << "You have just added " << name << " to "<< plan.getTrainingDays()[choice-1]->getWorkoutDayName();
+            std::cout << "\nPress enter to back to menu...\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            }
+        }
+        else 
+        {
+            std::cout << "Enter the number between 1 and " << plan.getTrainingDays().size();
         }
     }
-
-
 }
 
 // void Menu::Menu_AddExerciseToTrainingDay(){
