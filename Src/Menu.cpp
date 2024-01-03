@@ -19,8 +19,9 @@ void Menu::Menu_ShowTrainingPlan(){
     char answer;
     do{
         if(plan.getTrainingDays().empty()) 
-            { 
-            std::cout << "Plan is empty! You have to add new training day first!\n";
+            {
+            system("clear");
+            std::cout << "Plan is empty! You have to add new training day first!\n\n";
             std::cout << "Do you want to do this now [Y] - yes | [N] - no)? "; std::cin >> answer;
 
             switch(answer)
@@ -33,6 +34,7 @@ void Menu::Menu_ShowTrainingPlan(){
             case 'n': 
                 return;
             default:
+                system("clear");
                 std::cout << "You entered wrong char!\n"; 
                 std::cout << "\nPress enter to try again!\n";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -58,9 +60,10 @@ void Menu::Menu_AddTrainingday(){
     std::cout << "What is the name of you new training day?\n";
     std::cout << "Enter the name: "; std::cin >> name;
     plan.makeWorkoutDay(name);        
-    system("clear");
-    std::cout << "You have just created \"" << name << "\" training day!\n";
-    std::cout << "\nDo you want to add some exercises? [Y] - yes | [N] - no)? "; std::cin >> answer;
+        do {   
+        system("clear");
+        std::cout << "You have just created \"" << name << "\" training day!\n";
+        std::cout << "\nDo you want to add some exercises? [Y] - yes | [N] - no)? "; std::cin >> answer;    
             switch(answer)
             {
             case 'Y':
@@ -71,12 +74,14 @@ void Menu::Menu_AddTrainingday(){
             case 'n': 
                 return;
             default:
+                system("clear");
                 std::cout << "You entered wrong char!\n"; 
                 std::cout << "\nPress enter to try again!\n";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cin.get();
                 break;;
             }
+        } while(true);   
 }
 
 void Menu::Menu_AddExerciseToTrainingDay(){
@@ -105,8 +110,8 @@ void Menu::Menu_AddExerciseToTrainingDay(){
         system("clear");
         size_t choice;
         std::string name;
-        size_t sets; size_t reps;
-        float weight;
+        size_t sets = 0; size_t reps = 0;
+        float weight = 0.0f;
 
         plan.displayTrainingDays();
         std::cout << "\nSelect training day to which you want to add exercise: "; std::cin >> choice;
@@ -122,18 +127,39 @@ void Menu::Menu_AddExerciseToTrainingDay(){
             std::cout << "Number of reps:: "; std::cin >> reps;
             std::cout << "Amount of load: "; std::cin >> weight;
 
-            if (sets <= 0 || reps <= 0 || weight < 0) 
+            if (sets <= 0 and reps <= 0 and weight < 0) 
             {
-                std::cout << "Invalid input. Sets, reps, and weight must be positive values.\n";
+                std::cout << "Invalid input. Sets, reps and weight must be positive values (only weight could be equal to 0).\n";
+                return;
             }
-            else{
+
+            else
+            {
             plan.getTrainingDays()[choice-1]->addExercise(name, sets, reps, weight);
-            system("clear");
-            std::cout << "You have just added " << name << " to "<< plan.getTrainingDays()[choice-1]->getWorkoutDayName();
-            std::cout << "\nPress enter to back to menu...\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            return;
+
+            do{
+                system("clear");
+                std::cout << "You have just added " << name << " to "<< plan.getTrainingDays()[choice-1]->getWorkoutDayName() << '\n';
+                char answer;
+                std::cout << "\nDo you want another exercise? ([Y] - yes | [N] - no, return to menu)? "; std::cin >> answer;
+                    switch(answer)
+                {
+                        case 'Y':
+                        case 'y': Menu_AddTrainingday(); break;
+
+                        case 'N':
+                        case 'n': return; 
+
+                        default: 
+                            system("clear");
+                            std::cout << "You entered wrong char!\n"; 
+                            std::cout << "\nPress enter to try again!\n";
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            std::cin.get();std::cout << "\nYou entered wrong answer (write y or n)!\n"; 
+                            break;
+                }
+            } while(true);
+
             }
         }
         else 
@@ -199,7 +225,7 @@ void Menu::printMenu(){
                  "6. Remove exercise from training day\n"
                  "7. Remove training day from plan\n"
                  "8. Edit exercise in training day\n"
-                 "9. Edit training day in plan\n"
+                 "9. Edit training day in plan\n\n"
                  "0. EXIT\n";
 }
 
