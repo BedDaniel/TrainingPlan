@@ -10,6 +10,7 @@ public:
 private:
     TrainingPlan plan;
     void printMenu();
+    void clearScreen();
 
     void Menu_ShowTrainingPlan();
 
