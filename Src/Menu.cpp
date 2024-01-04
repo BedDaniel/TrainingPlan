@@ -152,12 +152,14 @@ void Menu::Menu_AddExerciseToTrainingDay(){
 
             else
             {
-                std::cout << "Enter the number between 1 and " << plan.getTrainingDays().size();
+                std::cout << "Enter the number between 1 and " << plan.getTrainingDays().size() << '\n';
             }
         }
             clearScreen();
             std::cout << "You are adding exercise to: " << plan.getTrainingDays()[choice-1]->getWorkoutDayName() << '\n';
-            
+
+             if (std::cin.peek() == '\n') { std::cin.ignore(); }
+
             while(true)
             {
                 std::cout << "\nExercise's name: "; 
@@ -165,7 +167,7 @@ void Menu::Menu_AddExerciseToTrainingDay(){
 
                 if (!name.empty()) { break; } 
 
-                else { std::cout << "Name cannot be empty. Please enter a name again.\n\n"; }
+                else { std::cout << "\nName cannot be empty. Please enter a name again.\n\n"; }
             }
 
             while (true) {
