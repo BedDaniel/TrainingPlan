@@ -59,10 +59,25 @@ void Menu::Menu_AddTrainingday(){
     clearScreen();
     char answer;
     std::string name;
-    std::cout << "What is the name of you new training day?\n";
-    std::cout << "Enter the name: "; std::cin >> name;
+
+    if (std::cin.peek() == '\n') { std::cin.ignore(); }
+
+    while (true)
+    {
+        std::cout << "What is the name of your new training day?\n";
+        std::cout << "Enter the name: ";
+        std::getline(std::cin, name);
+
+        if (!name.empty()) {
+            break;
+        } else {
+            std::cout << "\nName cannot be empty. Please enter a valid name.\n\n";
+        }
+    }
+
     plan.makeWorkoutDay(name);        
-        do {   
+    do 
+    {   
         clearScreen();
         std::cout << "You have just created \"" << name << "\" training day!\n";
         std::cout << "\nDo you want to add some exercises? ([Y] - yes | [N] - no)? "; std::cin >> answer;    
@@ -74,7 +89,7 @@ void Menu::Menu_AddTrainingday(){
                 break;
             case 'N':
             case 'n': 
-                return;
+                break;
             default:
                 clearScreen();
                 std::cout << "You entered wrong char!\n"; 
@@ -83,7 +98,7 @@ void Menu::Menu_AddTrainingday(){
                 std::cin.get();
                 break;;
             }
-        } while(true);   
+    } while(true);   
 }
 
 void Menu::Menu_AddExerciseToTrainingDay(){
@@ -116,15 +131,42 @@ void Menu::Menu_AddExerciseToTrainingDay(){
         float weight = 0.0f;
 
         plan.displayTrainingDays();
-        std::cout << "\nSelect training day to which you want to add exercise: "; std::cin >> choice;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        validateUserInput(choice);
-        if(choice >= 1 and choice <= plan.getTrainingDays().size())
+        std::cout << "\nSelect training day to which you want to add exercise: ";
+
+        while (true) 
         {
+            std::cin >> choice;
+            
+            if (std::cin.fail()) 
+            {
+                std::cout << "Invalid input. Please enter a number.\n";
+                std::cin.clear(); 
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            if(choice >= 1 and choice <= plan.getTrainingDays().size())
+            {
+                break;
+            }
+
+            else
+            {
+                std::cout << "Enter the number between 1 and " << plan.getTrainingDays().size();
+            }
+        }
             clearScreen();
             std::cout << "You are adding exercise to: " << plan.getTrainingDays()[choice-1]->getWorkoutDayName() << '\n';
-            std::cout << "\nExercise's name: "; 
-            std::getline(std::cin, name);
+            
+            while(true)
+            {
+                std::cout << "\nExercise's name: "; 
+                std::getline(std::cin, name);
+
+                if (!name.empty()) { break; } 
+
+                else { std::cout << "Name cannot be empty. Please enter a name again.\n\n"; }
+            }
 
             while (true) {
                 std::cout << "Number of sets: "; std::cin >> sets;
@@ -141,7 +183,7 @@ void Menu::Menu_AddExerciseToTrainingDay(){
                 std::cout << "Number of reps: "; std::cin >> reps;
                 if (std::cin.fail() || reps <= 0) 
                 {
-                    std::cout << "Wrong input! Try again\n";
+                    std::cout << "Wrong input! Try again!\n";
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
@@ -164,7 +206,8 @@ void Menu::Menu_AddExerciseToTrainingDay(){
             plan.getTrainingDays()[choice-1]->addExercise(name, sets, reps, weight);
 
             bool contiuneAdding = true;
-            while (contiuneAdding){
+            while (contiuneAdding)
+            {
                 clearScreen();
                 std::cout << "You have just added " << name << " to "<< plan.getTrainingDays()[choice-1]->getWorkoutDayName() << '\n';
                 char answer;
@@ -184,18 +227,14 @@ void Menu::Menu_AddExerciseToTrainingDay(){
                             std::cout << "You entered wrong char!\n"; 
                             std::cout << "\nPress enter to try again!\n";
                             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                            std::cin.get();std::cout << "\nYou entered wrong answer (write y or n)!\n"; 
+                            // std::cin.get();std::cout << "\nYou entered wrong answer (write y or n)!\n"; 
                             break;
                 }
             }
 
-        }
-        else 
-        {
-            std::cout << "Enter the number between 1 and " << plan.getTrainingDays().size();
-        }
     }
 }
+
 
 // void Menu::Menu_AddExerciseToTrainingDay(){
 
