@@ -2,17 +2,20 @@
 #include <iostream>
 
 void TrainingDay::displayTrainingDay() const {
-    std::cout << "Workout Day: " << workoutDayName_ << "\n";
+    std::cout << "\nTraining day: " << workoutDayName_ << "\n";
     
-    if (exercises_.empty()) {
-        std::cout << "No exercises for this day.\n";
-    } else {
+    if (exercises_.empty()) 
+    {
+        std::cout << "There is no any exercise in this day.\n";
+    } 
+    else 
+    {
         std::cout << "Exercises:\n";
         for (const auto& exercise : exercises_) {
             exercise->displayExerciseInfo();
         }
     }
-    std::cout << "\n";
+    std::cout << "\n------------------------------------------------\n";
 }
 
 void TrainingDay::removeExercise(int choice){
