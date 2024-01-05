@@ -5,6 +5,7 @@ class Menu{
 public:
     Menu() {};
     void runMenu();
+    void runMainMenu();
     void validateUserInput(size_t & choice);
 
 private:

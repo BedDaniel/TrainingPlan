@@ -92,7 +92,7 @@ void Menu::Menu_AddTrainingday(){
                 break;
             case 'N':
             case 'n': 
-                runMenu();
+                runMainMenu();
                 break;
             default:
                 clearScreen();
@@ -261,7 +261,6 @@ void Menu::printMenu(){
 void Menu::runMenu(){
     size_t choice;
 
-    if (std::cin.peek() == '\n') { std::cin.ignore(); 
     // plan.loadSavedTrainingPlan(); 
     do
     {
@@ -275,9 +274,7 @@ void Menu::runMenu(){
         switch (choice)
         {
         case 1:
-            clearScreen();
-            std::cout << "You have just created new trainig plan!\n";
-            system("PAUSE");
+            runMainMenu();
             break;
         case 2:
             Menu_LoadFromFile();
@@ -296,19 +293,35 @@ void Menu::runMenu(){
             std::cin.get();
             break;
         }
-    } while (choice < 0 or choice > 2);
+    } while (choice != 0);
+}
 
-    choice = 1;
 
-    while(choice != 0)
+
+void Menu::runMainMenu(){
+    size_t choice = 0;
+
+    do
     {
         clearScreen();
         printMenu();
 
-        if (std::cin.peek() == '\n') { std::cin.ignore(); }
-
         std::cout << "\nInsert a number between 0 - 9: ";
-        validateUserInput(choice);
+
+        while (true) {
+            if (std::cin.peek() == '\n') { std::cin.ignore(); }
+
+            if (std::cin >> choice && choice >= 0 && choice <= 9) {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                break;
+            } else {
+                std::cin.clear(); // Czyść flagi błęddu
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Czyść bufor
+                clearScreen();
+                printMenu();
+                std::cout << "Invalid input. Please enter a number between 0 - 9: ";
+            }
+        }
         clearScreen();
 
         switch (choice)
@@ -353,6 +366,5 @@ void Menu::runMenu(){
             std::cin.get();
             break;
         }
-    }
-}
+    } while(choice != 0);
 }
