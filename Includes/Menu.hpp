@@ -20,7 +20,7 @@ private:
     void Menu_AddTrainingday();
 
     void Menu_Remove();
-    void Menu_RemoveExerciseFromTrainingDay(){};
+    void Menu_RemoveExerciseFromTrainingDay();
     void Menu_RemoveTrainingDay(){};
 
     void Menu_Edit();
