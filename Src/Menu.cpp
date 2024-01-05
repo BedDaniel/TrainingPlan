@@ -68,6 +68,7 @@ void Menu::Menu_AddTrainingday(){
     {
         std::cout << "What is the name of your new training day?\n";
         std::cout << "Enter the name: ";
+        if (std::cin.peek() == '\n') { std::cin.ignore(); }
         std::getline(std::cin, name);
 
         if (!name.empty()) { break; } 
@@ -266,7 +267,7 @@ void Menu::runMenu(){
     {
         clearScreen();
         std::cout << "1. Create new training plan\n";
-        std::cout << "2. Load training plan\n\n";
+        std::cout << "2. Load training plan (it will work soon!)\n\n";
         std::cout << "0. EXIT\n\n";
         std::cout << "Insert a number between 0 - 2: ";
         validateUserInput(choice);
