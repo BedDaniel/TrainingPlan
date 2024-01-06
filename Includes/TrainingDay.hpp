@@ -21,7 +21,7 @@ public:
     void setWorkoutDayName(std::string newDayName) { workoutDayName_ = newDayName; }
 
     std::string getWorkoutDayName()       const { return workoutDayName_;}
-    std::vector<std::shared_ptr<Exercise>> getExercises() const { return exercises_;}
+    std::vector<std::shared_ptr<Exercise>>& getExercises() { return exercises_;}
 
 private:
     std::string workoutDayName_;

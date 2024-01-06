@@ -467,6 +467,112 @@ void Menu::Menu_SwapExercisesInTrainingDay() {
     }
 }
 
+void Menu::Menu_EditExerciseInTrainingDay(){
+    clearScreen();
+    if (plan.getTrainingDays().empty()) 
+    {
+        std::cout << "There are no training days in your plan!\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+        return;
+    }
+
+    size_t dayChoice = 0, exerciseChoice = 0;
+    
+    while (true) 
+    {
+        clearScreen();
+        std::cout << "Select the training day you want to edit:\n\n";
+        plan.displayTrainingDays();
+        std::cout << "\nNumber of selected training day: ";
+        if (std::cin >> dayChoice && dayChoice >= 1 && dayChoice <= plan.getTrainingDays().size()) 
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        } 
+        else 
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Press enter to try again!";
+            std::cin.get();
+        }
+    }
+
+    auto selectedDay = plan.getTrainingDays()[dayChoice - 1];
+
+    if (selectedDay->getExercises().empty()) 
+    {
+        clearScreen();
+        std::cout << "There are no exercises in this training day.\n\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.get();
+        return;
+    } 
+    else 
+    {
+        while (true) 
+        {
+            clearScreen();
+            std::cout << "Select the exercise you want to edit:\n\n";
+            selectedDay->displayTrainingDay();
+            std::cout << "\nNumber of selected exercise: ";
+            if (std::cin >> exerciseChoice && exerciseChoice >= 1 && exerciseChoice <= selectedDay->getExercises().size()) 
+            {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                break;
+            } 
+            else 
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid input. Press enter to try again!";
+                std::cin.get();
+            }
+        }
+
+        auto& exerciseToEdit = selectedDay->getExercises()[exerciseChoice - 1];
+
+        std::string newName;
+        size_t newSets, newReps;
+        float newWeight;
+
+        clearScreen();
+        std::cout << "Editing exercise: " << exerciseToEdit->getName() << "\n";
+
+        std::cout << "Enter new name (current: " << exerciseToEdit->getName() << "): ";
+        std::getline(std::cin, newName);
+        if (!newName.empty()) {
+            exerciseToEdit->setName(newName);
+        }
+
+        std::cout << "Enter new number of sets (current: " << exerciseToEdit->getSets() << "): ";
+        if (std::cin >> newSets) {
+            exerciseToEdit->setSets(newSets);
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Enter new number of reps (current: " << exerciseToEdit->getReps() << "): ";
+        if (std::cin >> newReps) {
+            exerciseToEdit->setReps(newReps);
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Enter new weight (current: " << exerciseToEdit->getWeight() << "): ";
+        if (std::cin >> newWeight) {
+            exerciseToEdit->setWeight(newWeight);
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        clearScreen();
+        std::cout << "Exercise updated successfully.\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.get();
+    }
+}
+
+
 
 void Menu::runMainMenu(){
     size_t choice = 0;
@@ -526,7 +632,7 @@ void Menu::runMainMenu(){
             Menu_SwapExercisesInTrainingDay();
             break;
         case 9:
-            Menu_EditTrainingDay();
+            Menu_EditExerciseInTrainingDay();
             break;
         default:
             clearScreen();
