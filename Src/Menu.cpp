@@ -252,48 +252,12 @@ void Menu::printMenu(){
                  "5. Add training day to plan\n"
                  "6. Remove exercise from training day\n"
                  "7. Remove training day from plan\n"
-                 "8. Edit exercise in training day\n"
+                 "8. Swap exercises in training day\n"
                  "9. Edit training day in plan\n\n"
                  "0. EXIT\n";
 }
 
-void Menu::runMenu(){
-    size_t choice;
 
-    // plan.loadSavedTrainingPlan(); 
-    do
-    {
-        clearScreen();
-        std::cout << "1. Create new training plan\n";
-        std::cout << "2. Load training plan (it will work soon!)\n\n";
-        std::cout << "0. EXIT\n\n";
-        std::cout << "Insert a number between 0 - 2: ";
-        validateUserInput(choice);
-
-        switch (choice)
-        {
-        case 1:
-            runMainMenu();
-            break;
-        case 2:
-            Menu_LoadFromFile();
-            break;
-        case 0:
-            clearScreen();
-            std::cout << "\nPRESS ENTER TO EXIT\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            break;
-        default:
-            clearScreen();
-            std::cout << "You entered a wrong number!\n";
-            std::cout << "Press enter to try again!\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            break;
-        }
-    } while (choice != 0);
-}
 
 void Menu::Menu_RemoveTrainingDay(){
     clearScreen();
@@ -436,6 +400,74 @@ void Menu::Menu_RemoveExerciseFromTrainingDay(){
     }
 }
 
+void Menu::Menu_SwapExercisesInTrainingDay() {
+    clearScreen();
+    if (plan.getTrainingDays().empty()) {
+        std::cout << "There are no training days in your plan!\n\n";
+        std::cout << "Press enter to return to the menu.";
+        // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+        return;
+    }
+
+    size_t dayChoice = 0, firstExerciseChoice = 0, secondExerciseChoice = 0;
+
+    // Wybór dnia treningowego
+    while (true) {
+        clearScreen();
+        std::cout << "Select the training day:\n\n";
+        plan.displayTrainingDays();
+        std::cout << "\nNumber of selected training day: ";
+        if (std::cin >> dayChoice && dayChoice >= 1 && dayChoice <= plan.getTrainingDays().size()) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        } else {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Press enter to try again!";
+            std::cin.get();
+        }
+    }
+
+    auto selectedDay = plan.getTrainingDays()[dayChoice - 1];
+
+    // Wybór ćwiczeń do zamiany
+    if (selectedDay->getExercises().size() < 2) {
+        clearScreen();
+        std::cout << "Not enough exercises to swap in the selected day.\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.get();
+        return;
+    } else {
+        while (true) {
+            clearScreen();
+            std::cout << "Select two exercises to swap:\n\n";
+            selectedDay->displayTrainingDay();
+            std::cout << "\nNumber of the first exercise: ";
+            if (std::cin >> firstExerciseChoice && firstExerciseChoice >= 1 && firstExerciseChoice <= selectedDay->getExercises().size()) {
+                std::cout << "Number of the second exercise: ";
+                if (std::cin >> secondExerciseChoice && secondExerciseChoice >= 1 && secondExerciseChoice <= selectedDay->getExercises().size() && firstExerciseChoice != secondExerciseChoice) {
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
+            }
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input or same exercises selected. Press enter to try again!";
+            std::cin.get();
+        }
+
+        selectedDay->swapExercises(firstExerciseChoice - 1, secondExerciseChoice - 1);
+        clearScreen();
+        std::cout << "Exercises swapped successfully.\n";
+        std::cout << "This is how your training plan looks like now!\n\n";
+        selectedDay->displayTrainingDay();
+        std::cout << "\nPress enter to return to the menu.";
+        std::cin.get();
+    }
+}
+
+
 void Menu::runMainMenu(){
     size_t choice = 0;
 
@@ -491,7 +523,7 @@ void Menu::runMainMenu(){
             Menu_RemoveTrainingDay();
             break;
         case 8:
-            Menu_EditExerciseInTrainingDay();
+            Menu_SwapExercisesInTrainingDay();
             break;
         case 9:
             Menu_EditTrainingDay();
@@ -505,4 +537,42 @@ void Menu::runMainMenu(){
             break;
         }
     } while(choice != 0);
+}
+
+void Menu::runMenu(){
+    size_t choice;
+
+    // plan.loadSavedTrainingPlan(); 
+    do
+    {
+        clearScreen();
+        std::cout << "1. Create new training plan\n";
+        std::cout << "2. Load training plan (it will work soon!)\n\n";
+        std::cout << "0. EXIT\n\n";
+        std::cout << "Insert a number between 0 - 2: ";
+        validateUserInput(choice);
+
+        switch (choice)
+        {
+        case 1:
+            runMainMenu();
+            break;
+        case 2:
+            Menu_LoadFromFile();
+            break;
+        case 0:
+            clearScreen();
+            std::cout << "\nPRESS ENTER TO EXIT\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
+        default:
+            clearScreen();
+            std::cout << "You entered a wrong number!\n";
+            std::cout << "Press enter to try again!\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
+        }
+    } while (choice != 0);
 }
