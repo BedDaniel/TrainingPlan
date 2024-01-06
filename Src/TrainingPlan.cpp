@@ -19,15 +19,18 @@ void TrainingPlan::displayTrainingDays() const {
 }
 
 void TrainingPlan::displayTrainingDaysWithExercises() const {
+    int num = 1;
     for (const auto& trainingDay : trainingDays_) 
-    {
-        trainingDay->displayTrainingDay(); 
+    {   
+        std::cout << num << ". ";
+        trainingDay->displayTrainingDay();
+        ++num;
     }
 }
 
 
 void TrainingPlan::removeTrainingDay(int pos) {
-    auto iteratorToRemove = trainingDays_.begin() + pos - 1;
+    auto iteratorToRemove = trainingDays_.begin() + pos;
     trainingDays_.erase(iteratorToRemove);
 }
 

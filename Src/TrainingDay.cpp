@@ -3,16 +3,16 @@
 
 void TrainingDay::displayTrainingDay() const {
     int num = 1;
-    std::cout << '\n' << num << ". training day: " << workoutDayName_ << "\n";
+    std::cout << "training day: " << workoutDayName_ << "\n";
     
     if (exercises_.empty()) 
     {
-        std::cout << "There is no any exercise in this day.\n";
+        std::cout << "\nThere is no any exercise in this day.\n";
     } 
     else 
     {   
         int num = 1;
-        std::cout << "Exercises:\n";
+        std::cout << "\nExercises:\n";
         for (const auto& exercise : exercises_) {
             // std::cout << num << ". " << exercise->getName() << '\n';
             std::cout << num << ". ";

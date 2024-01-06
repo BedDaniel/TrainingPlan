@@ -295,6 +295,46 @@ void Menu::runMenu(){
     } while (choice != 0);
 }
 
+void Menu::Menu_RemoveTrainingDay(){
+    clearScreen();
+    if (plan.getTrainingDays().empty()) {
+        std::cout << "There are no training days in your training plan!\n";  
+        std::cout << "Press enter to return to the menu.";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+        return;
+    } 
+
+    size_t dayChoice = 0;
+
+    while (true) 
+    {
+        clearScreen();
+        std::cout << "Select the training day you want to remove:\n\n";
+        plan.displayTrainingDays();
+        std::cout << "\nNumber of selected training day: ";
+        
+        if (std::cin >> dayChoice && dayChoice >= 1 && dayChoice <= plan.getTrainingDays().size()) 
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        } 
+        else 
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Press enter to try again!";
+            std::cin.get();
+        }
+    }
+
+    plan.removeTrainingDay(dayChoice - 1);
+    clearScreen();
+    std::cout << "Training day removed successfully.\n\n";
+    std::cout << "Press enter to return to the menu.";
+    std::cin.get();
+}
+
 void Menu::Menu_RemoveExerciseFromTrainingDay(){
     clearScreen();
     char answer;
@@ -324,7 +364,6 @@ void Menu::Menu_RemoveExerciseFromTrainingDay(){
                 }
         }
     }
-
     else
     {
         size_t dayChoice = 0;
@@ -358,7 +397,7 @@ void Menu::Menu_RemoveExerciseFromTrainingDay(){
         if (selectedDay->getExercises().empty()) 
         {
             clearScreen();
-            std::cout << "There are no exercises in this training day.\n";
+            std::cout << "There are no exercises in this training day.\n\n";
             std::cout << "Press enter to return to the menu.";
             std::cin.get();
             return;
@@ -390,7 +429,7 @@ void Menu::Menu_RemoveExerciseFromTrainingDay(){
 
             selectedDay->removeExercise(exerciseChoice - 1);
             clearScreen();
-            std::cout << "Exercise removed successfully.\n";
+            std::cout << "Exercise removed successfully.\n\n";
             std::cout << "Press enter to return to the menu.";
             std::cin.get();
         }
