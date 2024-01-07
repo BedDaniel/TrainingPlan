@@ -27,7 +27,7 @@ private:
     void Menu_SwapExercisesInTrainingDay();
     void Menu_EditExerciseInTrainingDay();
 
-    void Menu_SaveToFile(){};
+    void Menu_SaveToFile();
     void Menu_LoadFromFile(){};
 
 };

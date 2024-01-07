@@ -1,6 +1,7 @@
 #include "../Includes/Menu.hpp"
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <limits>
 
@@ -15,6 +16,43 @@ void Menu::validateUserInput(size_t & choice){
 }
 
 void Menu::clearScreen() { std::cout << "\x1B[2J\x1B[H"; }
+
+void Menu::Menu_SaveToFile() {
+    clearScreen();
+    if (plan.getTrainingDays().empty()) {
+        std::cout << "Training plan is empty. There is nothing to save.\n\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+        return;
+    }
+
+    std::string filename;
+    while (true) 
+    {
+        std::cout << "Enter the filename to save the training plan: "; /* (without '.txt' extension): "; */
+        std::getline(std::cin, filename);
+        filename += ".txt";
+
+        std::ifstream fileCheck(filename);
+        if (fileCheck) 
+        {
+            std::cout << "A file named '" << filename << "' already exists. Please choose a different name.\n";
+        } 
+        else 
+        {
+            break; // Wyjście z pętli, jeśli plik o podanej nazwie nie istnieje
+        }
+    }
+
+    // Tutaj będzie wywołanie funkcji zapisującej plan do pliku
+    // Na przykład: 
+    plan.saveToFile(filename);
+
+    std::cout << "Training plan saved to '" << filename << "' successfully.\n\n";
+    std::cout << "Press enter to return to the menu.";
+    std::cin.get();
+}
 
 
 void Menu::Menu_ShowTrainingPlan(){

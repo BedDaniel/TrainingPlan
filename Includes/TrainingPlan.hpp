@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <fstream>
 #include <string>
 #include <algorithm>
 #include "../Includes/Exercises.hpp"
@@ -22,18 +23,12 @@ public:
 
     void removeTrainingDay(int pos);
 
-    // void displayPlan() const;
-
-    // void editExercise();
-    // Do zrobienia:
-
     std::vector<std::string> getFIleNames() const { return fileName_; };
-
-
     std::vector<std::shared_ptr<TrainingDay>> & getTrainingDays () { return trainingDays_; }
 
-private:
+    void saveToFile(const std::string& filename) const;
 
+private:
     std::vector<std::shared_ptr<TrainingDay>> trainingDays_;
 
     std::vector<std::string> fileName_;

@@ -28,10 +28,34 @@ void TrainingPlan::displayTrainingDaysWithExercises() const {
     }
 }
 
-
 void TrainingPlan::removeTrainingDay(int pos) {
     auto iteratorToRemove = trainingDays_.begin() + pos;
     trainingDays_.erase(iteratorToRemove);
+}
+
+void TrainingPlan::saveToFile(const std::string& filename) const {
+    std::ofstream outFile(filename);
+    if (!outFile.is_open()) 
+    {
+        std::cerr << "Could not open file " << filename << " for writing.\n";
+        return;
+    }
+
+    for (const auto& day : trainingDays_) 
+    {
+        outFile << "Day: " << day->getWorkoutDayName() << "\n";
+
+        for (const auto& exercise : day->getExercises()) 
+        {
+            outFile << "Exercise: " << exercise->getName() << ", ";
+            outFile << "Sets: " << exercise->getSets() << ", ";
+            outFile << "Reps: " << exercise->getReps() << ", ";
+            outFile << "Weight: " << exercise->getWeight() << "\n";
+        }
+        outFile << "---\n";
+    }
+
+    // std::cout << "Training plan saved to " << filename << std::endl;
 }
 
 
