@@ -26,6 +26,40 @@ void Menu::Menu_SaveToFile() {
         std::cin.get();
         return;
     }
+}
+
+void Menu::Menu_LoadFromFile() {
+    clearScreen();
+    std::cout << "Warning: Loading a new training plan will overwrite the current plan.\n";
+    std::cout << "Do you want to continue? (Y/N): ";
+
+    char choice;
+    std::cin >> choice;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (choice != 'Y' && choice != 'y') {
+        std::cout << "Operation cancelled. Press enter to return to the menu.";
+        std::cin.get();
+        return; // Powrót do głównego menu
+    }
+
+    std::string filename;
+    std::cout << "Enter the filename to load the training plan from (with '.txt' extension): ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorowanie pozostałego bufora
+    std::getline(std::cin, filename);
+
+    std::ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        std::cout << "Could not open file " << filename << " for reading.\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.get();
+        return;
+    }
+
+    // Resetowanie obecnego planu treningowego
+    // plan.clearTrainingDays();
+    // ... (reszta kodu)
+
 
     std::string filename;
     while (true) 
