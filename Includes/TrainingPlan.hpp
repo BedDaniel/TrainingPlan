@@ -30,7 +30,7 @@ public:
     std::vector<std::string> getFIleNames() const { return fileName_; };
 
 
-    std::vector<std::shared_ptr<TrainingDay>> getTrainingDays () const { return trainingDays_; }
+    std::vector<std::shared_ptr<TrainingDay>> & getTrainingDays () { return trainingDays_; }
 
 private:
 

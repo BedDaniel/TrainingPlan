@@ -467,10 +467,9 @@ void Menu::Menu_SwapExercisesInTrainingDay() {
     }
 }
 
-void Menu::Menu_EditExerciseInTrainingDay(){
+void Menu::Menu_EditExerciseInTrainingDay() {
     clearScreen();
-    if (plan.getTrainingDays().empty()) 
-    {
+    if (plan.getTrainingDays().empty()) {
         std::cout << "There are no training days in your plan!\n";
         std::cout << "Press enter to return to the menu.";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -478,21 +477,19 @@ void Menu::Menu_EditExerciseInTrainingDay(){
         return;
     }
 
-    size_t dayChoice = 0, exerciseChoice = 0;
-    
-    while (true) 
-    {
+    size_t dayChoice = 0;
+    char menuChoice;
+
+    // Wybór dnia treningowego
+    while (true) {
         clearScreen();
         std::cout << "Select the training day you want to edit:\n\n";
         plan.displayTrainingDays();
         std::cout << "\nNumber of selected training day: ";
-        if (std::cin >> dayChoice && dayChoice >= 1 && dayChoice <= plan.getTrainingDays().size()) 
-        {
+        if (std::cin >> dayChoice && dayChoice >= 1 && dayChoice <= plan.getTrainingDays().size()) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             break;
-        } 
-        else 
-        {
+        } else {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Invalid input. Press enter to try again!";
@@ -500,79 +497,133 @@ void Menu::Menu_EditExerciseInTrainingDay(){
         }
     }
 
-    auto selectedDay = plan.getTrainingDays()[dayChoice - 1];
+    auto& selectedDay = plan.getTrainingDays()[dayChoice - 1];
 
-    if (selectedDay->getExercises().empty()) 
+    clearScreen();
+    std::cout << "Selected day: " << selectedDay->getWorkoutDayName() << "\n\n";
+    std::cout << "1. Change the name of the training day\n";
+    std::cout << "2. Modify an exercise\n\n";
+    std::cout << "0. Exit\n\n";
+    std::cout << "Enter your choice: ";
+    std::cin >> menuChoice;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    switch (menuChoice) 
     {
-        clearScreen();
-        std::cout << "There are no exercises in this training day.\n\n";
-        std::cout << "Press enter to return to the menu.";
-        std::cin.get();
-        return;
-    } 
-    else 
-    {
-        while (true) 
-        {
+        case '1':
+        {   
             clearScreen();
-            std::cout << "Select the exercise you want to edit:\n\n";
-            selectedDay->displayTrainingDay();
-            std::cout << "\nNumber of selected exercise: ";
-            if (std::cin >> exerciseChoice && exerciseChoice >= 1 && exerciseChoice <= selectedDay->getExercises().size()) 
+            std::string newDayName;
+            std::cout << "Enter new name for the training day: ";
+            std::getline(std::cin, newDayName);
+            if (!newDayName.empty()) 
             {
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                break;
+                selectedDay->setWorkoutDayName(newDayName);
+                std::cout << "\nTraining day name updated successfully.\n";
             } 
             else 
             {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input. Press enter to try again!";
+                std::cout << "Name cannot be empty.\n";
+            }
+            break;
+        }
+
+        case '2':
+        {
+            size_t exerciseChoice = 0;
+            if (selectedDay->getExercises().empty()) 
+            {
+                clearScreen();
+                std::cout << "There are no exercises in this training day.\n";
+                std::cout << "Press enter to return to the menu.";
                 std::cin.get();
+                return;
+            } 
+            else 
+            {
+                while (true) 
+                {
+                    clearScreen();
+                    std::cout << "Select the exercise you want to edit:\n\n";
+                    selectedDay->displayTrainingDay();
+                    std::cout << "\nNumber of selected exercise: ";
+
+                    if (std::cin >> exerciseChoice && exerciseChoice >= 1 && exerciseChoice <= selectedDay->getExercises().size()) 
+                    {
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        break;
+                    } 
+                    else 
+                    {
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << "Invalid input. Press enter to try again!";
+                        std::cin.get();
+                    }
+                }
+
+                auto& exerciseToEdit = selectedDay->getExercises()[exerciseChoice - 1];
+
+                std::string newName;
+                size_t newSets, newReps;
+                float newWeight;
+
+                clearScreen();
+                std::cout << "Editing exercise: " << exerciseToEdit->getName() << "\n\n";
+
+                std::cout << "Enter new name or press enter to skip: ";
+                std::getline(std::cin, newName);
+                if (!newName.empty()) 
+                {
+                    exerciseToEdit->setName(newName);
+                }
+
+                std::cout << "Enter new number of sets (current: " << exerciseToEdit->getSets() << ") or enter 0 to skip: ";
+                if (std::cin >> newSets && newSets > 0) 
+                {
+                    exerciseToEdit->setSets(newSets);
+                }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                std::cout << "Enter new number of reps (current: " << exerciseToEdit->getReps() << ") or enter 0 to skip: ";
+                if (std::cin >> newReps && newReps > 0) 
+                {
+                    exerciseToEdit->setReps(newReps);
+                }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                std::cout << "Enter new weight (current: " << exerciseToEdit->getWeight() << ") or enter 0 to skip: ";
+                if (std::cin >> newWeight && newWeight >= 0) 
+                {
+                    exerciseToEdit->setWeight(newWeight);
+                }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                clearScreen();
+                std::cout << "Exercise updated successfully!\n\n";
+                std::cout << "That is how it looks like now!\n\n";
+                std::cout << "Exercise name: ";
+                exerciseToEdit->displayExerciseInfo();
+                std::cout << "\nPress enter to return to the menu.";
+                std::cin.get();
+            break;
             }
         }
-
-        auto& exerciseToEdit = selectedDay->getExercises()[exerciseChoice - 1];
-
-        std::string newName;
-        size_t newSets, newReps;
-        float newWeight;
-
-        clearScreen();
-        std::cout << "Editing exercise: " << exerciseToEdit->getName() << "\n";
-
-        std::cout << "Enter new name (current: " << exerciseToEdit->getName() << "): ";
-        std::getline(std::cin, newName);
-        if (!newName.empty()) {
-            exerciseToEdit->setName(newName);
+        case '0':
+        {
+            return;
         }
-
-        std::cout << "Enter new number of sets (current: " << exerciseToEdit->getSets() << "): ";
-        if (std::cin >> newSets) {
-            exerciseToEdit->setSets(newSets);
+        default:
+        {
+            std::cout << "Invalid choice. Press enter to try again.";
+            std::cin.get();
+            break;
         }
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        std::cout << "Enter new number of reps (current: " << exerciseToEdit->getReps() << "): ";
-        if (std::cin >> newReps) {
-            exerciseToEdit->setReps(newReps);
-        }
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        std::cout << "Enter new weight (current: " << exerciseToEdit->getWeight() << "): ";
-        if (std::cin >> newWeight) {
-            exerciseToEdit->setWeight(newWeight);
-        }
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        clearScreen();
-        std::cout << "Exercise updated successfully.\n";
-        std::cout << "Press enter to return to the menu.";
-        std::cin.get();
     }
+
+    // std::cout << "\nPress enter to return to the menu.";
+    // std::cin.get();
 }
-
-
 
 void Menu::runMainMenu(){
     size_t choice = 0;
