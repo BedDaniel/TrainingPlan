@@ -58,5 +58,9 @@ void TrainingPlan::saveToFile(const std::string& filename) const {
     // std::cout << "Training plan saved to " << filename << std::endl;
 }
 
+void TrainingPlan::clearTrainingDays(){
+    trainingDays_.clear();
+}
+
 
 

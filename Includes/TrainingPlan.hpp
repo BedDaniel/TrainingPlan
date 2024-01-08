@@ -23,6 +23,8 @@ public:
 
     void removeTrainingDay(int pos);
 
+    void clearTrainingDays();
+
     std::vector<std::string> getFIleNames() const { return fileName_; };
     std::vector<std::shared_ptr<TrainingDay>> & getTrainingDays () { return trainingDays_; }
 
