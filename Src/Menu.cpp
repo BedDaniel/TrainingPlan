@@ -4,6 +4,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <limits>
+#include <filesystem>
 
 
 void Menu::validateUserInput(size_t & choice){
@@ -27,35 +28,50 @@ void Menu::Menu_SaveToFile() {
         std::cin.get();
         return;
     }
+
     std::string filename;
+    std::string directory = "Saved_Training_Plans";
+
+    std::filesystem::path dirPath = std::filesystem::current_path() / directory;
+    if (!std::filesystem::exists(dirPath)) 
+    {
+        std::filesystem::create_directory(dirPath);
+    }
+
     while (true) 
     {
         std::cout << "Enter the filename to save the training plan: "; /* (without '.txt' extension): "; */
         std::getline(std::cin, filename);
-        filename += ".txt";
+        std::filesystem::path filePath = dirPath / (filename + ".txt");
 
         std::ifstream fileCheck(filename);
-        if (fileCheck) 
+
+        if (std::filesystem::exists(filePath)) 
         {
-            std::cout << "A file named '" << filename << "' already exists. Please choose a different name.\n";
+            clearScreen();
+            std::cout << "A file named: \n'" << filePath << "' already exists. Please choose a different name.\n";
         } 
         else 
         {
+            plan.saveToFile(filePath.string());
+            plan.addSavedFileNames(filePath.string());
             break;
         }
     }
 
     plan.saveToFile(filename);
+    plan.addSavedFileNames(filename);
 
-    std::cout << "Training plan saved to '" << filename << "' successfully.\n\n";
+    clearScreen();
+    std::cout << "Training plan saved to '" << filename << ".txt' successfully.\n\n";
     std::cout << "Press enter to return to the menu.";
     std::cin.get();
 }
 
 
-void Menu::Menu_LoadFromFile() {
+void Menu::Menu_LoadFromFile2() {
     clearScreen();
-    std::cout << "Warning: Loading a new training plan will overwrite the current plan.\n";
+    std::cout << "!!! Warning!!!\n\nLoading a new training plan will overwrite the current plan.\n\n";
     std::cout << "Do you want to continue? (Y/N): ";
 
     char choice;
@@ -64,13 +80,13 @@ void Menu::Menu_LoadFromFile() {
 
     if (choice != 'Y' && choice != 'y') 
     {
-        std::cout << "Operation cancelled. Press enter to return to the menu.";
+        std::cout << "\nOperation cancelled. Press enter to return to the menu.";
         std::cin.get();
         return;
     }
 
     std::string filename;
-    std::cout << "Enter the filename to load the training plan from (with '.txt' extension): ";
+    std::cout << "\nEnter the filename to load the training plan from (with '.txt' extension): ";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, filename);
 
@@ -126,6 +142,93 @@ void Menu::Menu_LoadFromFile() {
     std::cout << "Press enter to return to the menu.";
     std::cin.get();
 }
+
+
+
+
+
+
+
+
+// Do przetestowania!!!
+void Menu::Menu_LoadFromFile() {
+    clearScreen();
+    std::string directory = "Saved_Training_Plans";
+    std::filesystem::path dirPath = std::filesystem::current_path() / directory;
+
+    if (!std::filesystem::exists(dirPath) || std::filesystem::is_empty(dirPath)) 
+    {
+        if (!std::filesystem::exists(dirPath)) 
+        {
+            std::filesystem::create_directory(dirPath);
+        }
+        std::cout << "Currently, there are no saved training plans.\n";
+        std::cout << "Do you want to create a new plan now? (Y/N): ";
+
+        char choice;
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (choice == 'Y' || choice == 'y') 
+        {
+            Menu_AddTrainingday();
+        } 
+        else { return; }
+    } 
+    
+    else 
+    {
+        std::cout << "Available training plans:\n";
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath)) 
+        {
+            if (entry.is_regular_file()) 
+            {
+                std::cout << " - " << entry.path().filename() << std::endl;
+            }
+        }
+    }
+
+    if (std::filesystem::exists(dirPath) && !std::filesystem::is_empty(dirPath)) 
+    {
+        std::cout << "Available training plans:\n";
+        int fileIndex = 1;
+        std::vector<std::string> fileNames;
+
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath)) 
+        {
+            if (entry.is_regular_file()) 
+            {
+                std::cout << fileIndex << ". " << entry.path().filename() << std::endl;
+                fileNames.push_back(entry.path().filename());
+                fileIndex++;
+            }
+        }
+
+        std::cout << "\nEnter the number of the plan you want to load: ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice < 1 || choice > fileNames.size()) 
+        {
+            std::cout << "Invalid choice. Press enter to return to the menu.";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            return;
+        }
+
+        std::string selectedFile = fileNames[choice - 1];
+        std::filesystem::path filePath = dirPath / selectedFile;
+        
+        plan.clearTrainingDays();
+        plan.loadFromFile(filePath.string());
+
+        std::cout << "Training plan '" << selectedFile << "' loaded successfully.\n";
+        std::cout << "Press enter to return to the menu.";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+    }
+}
+
 
 
 
@@ -237,7 +340,7 @@ void Menu::Menu_AddExerciseToTrainingDay(){
                 case 'n': 
                     return; 
 
-                default: std::cout << "\nYou entered wrong answer (write y or n)!\n"; break;
+                default: std::cout << "\n\nYou entered wrong answer (write y or n)!\n"; break;
             }
         }
     }
@@ -258,7 +361,7 @@ void Menu::Menu_AddExerciseToTrainingDay(){
             
             if (std::cin.fail()) 
             {
-                std::cout << "Invalid input. Please enter a number.\n";
+                std::cout << "\nInvalid input. Please enter a number.\n";
                 std::cin.clear(); 
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 continue;

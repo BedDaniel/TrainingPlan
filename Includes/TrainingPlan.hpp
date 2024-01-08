@@ -25,10 +25,15 @@ public:
 
     void clearTrainingDays();
 
-    std::vector<std::string> getFIleNames() const { return fileName_; };
+    std::vector<std::string> getFileNames() const { return fileName_; };
+
+    void addSavedFileNames(std::string newFileName) { fileName_.push_back(newFileName); };
+
     std::vector<std::shared_ptr<TrainingDay>> & getTrainingDays () { return trainingDays_; }
 
     void saveToFile(const std::string& filename) const;
+
+    void loadFromFile(const std::string& filename);
 
 private:
     std::vector<std::shared_ptr<TrainingDay>> trainingDays_;

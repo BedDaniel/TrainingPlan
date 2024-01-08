@@ -54,13 +54,53 @@ void TrainingPlan::saveToFile(const std::string& filename) const {
         }
         outFile << "---\n";
     }
-
-    // std::cout << "Training plan saved to " << filename << std::endl;
 }
 
 void TrainingPlan::clearTrainingDays(){
     trainingDays_.clear();
 }
+
+void TrainingPlan::loadFromFile(const std::string& filename) {
+    std::ifstream inFile(filename);
+    if (!inFile.is_open()) 
+    {
+        std::cerr << "Could not open file " << filename << " for reading.\n";
+        return;
+    }
+
+    std::string line;
+
+    while (std::getline(inFile, line)) 
+    {
+        if (line.starts_with("Day: ")) 
+        {
+            std::string dayName = line.substr(5); 
+            this->makeWorkoutDay(dayName);
+        } 
+
+        else if (line.starts_with("Exercise: ")) 
+        {
+            std::shared_ptr<TrainingDay> currentDay = trainingDays_.back();
+
+            size_t pos = line.find(", Sets: ");
+            std::string name = line.substr(10, pos - 10);
+            line = line.substr(pos + 8); 
+
+            pos = line.find(", Reps: ");
+            size_t sets = std::stoi(line.substr(0, pos));
+            line = line.substr(pos + 8); 
+
+            pos = line.find(", Weight: ");
+            size_t reps = std::stoi(line.substr(0, pos));
+            float weight = std::stof(line.substr(pos + 10)); 
+
+            currentDay->addExercise(name, sets, reps, weight);
+        } 
+
+        else if (line == "---") {}
+    }
+}
+
 
 
 

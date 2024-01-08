@@ -29,5 +29,6 @@ private:
 
     void Menu_SaveToFile();
     void Menu_LoadFromFile();
+    void Menu_LoadFromFile2();
 
 };
