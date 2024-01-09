@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iomanip>
 
 //#include "../Includes/TrainingPlan.hpp"
 //#include "../Includes/Menu.hpp"
@@ -22,6 +23,7 @@ public:
     float getWeight()     const { return weight_;}
 
     void displayExerciseInfo() const;
+    void displayExerciseInfoInEditFunction() const;
     
 private:
     std::string name_;

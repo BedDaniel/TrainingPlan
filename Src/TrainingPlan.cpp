@@ -22,9 +22,11 @@ void TrainingPlan::displayTrainingDaysWithExercises() const {
     int num = 1;
     for (const auto& trainingDay : trainingDays_) 
     {   
-        std::cout << num << ". ";
         trainingDay->displayTrainingDay();
-        ++num;
+
+        // std::cout << num << ". ";
+        // trainingDay->displayTrainingDay();
+        // ++num;
     }
 }
 

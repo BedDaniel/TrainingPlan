@@ -19,7 +19,7 @@ void Menu::runMenu(){
         std::cout << "1. Create new training plan\n";
         std::cout << "2. Load training plan\n\n";
         std::cout << "0. EXIT\n\n";
-        std::cout << "Insert a number between 0 - 2: ";
+        std::cout << "Insert a number between 0 - 2: "; std::cin >> choice;
 
         switch (choice)
         {
@@ -31,7 +31,7 @@ void Menu::runMenu(){
             break;
         case 0:
             clearScreen();
-            std::cout << "\nPRESS ENTER TO EXIT\n";
+            std::cout << "Press ENTER to exit!\nHave a nice day!\n";
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cin.get();
             break;
@@ -180,8 +180,8 @@ void Menu::Menu_SaveToFile() {
         std::cout << "Training plan is empty. There is nothing to save.\n\n";
         std::cout << "Press enter to return to the menu.";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cin.get();
         return;
+        // std::cin.get();
     }
 
     std::string filename;
@@ -204,7 +204,7 @@ void Menu::Menu_SaveToFile() {
         if (std::filesystem::exists(filePath)) 
         {
             clearScreen();
-            std::cout << "A file named: \n'" << filePath << "' already exists. Please choose a different name.\n";
+            std::cout << "A file named: \n'" << filename << "' already exists. Please choose a different name.\n";
         } 
         else 
         {
@@ -234,7 +234,7 @@ void Menu::Menu_LoadFromFile() {
         {
             std::filesystem::create_directory(dirPath);
         }
-        std::cout << "Currently, there are no saved training plans.\n";
+        std::cout << "Currently, there are no saved training plans.\n\n";
         std::cout << "Do you want to create a new plan now? (Y/N): ";
 
         char choice;
@@ -283,7 +283,7 @@ void Menu::Menu_LoadFromFile() {
         plan.loadFromFile(filePath.string());
 
         clearScreen();
-        std::cout << "Training plan '" << selectedFile << "' loaded successfully.\n";
+        std::cout << "Training plan '" << selectedFile << "' loaded successfully.\n\n";
         std::cout << "Press enter to return to the menu.";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin.get();
@@ -691,7 +691,7 @@ void Menu::Menu_SwapExercisesInTrainingDay() {
         selectedDay->swapExercises(firstExerciseChoice - 1, secondExerciseChoice - 1);
         clearScreen();
         std::cout << "Exercises swapped successfully.\n\n";
-        std::cout << "This is how your training plan looks like now!\n\n";
+        std::cout << "This is how your training day looks like now!\n\n";
         selectedDay->displayTrainingDay();
 
         std::cout << "\nPress enter to return to the menu.";
@@ -834,7 +834,7 @@ void Menu::Menu_EditExerciseInTrainingDay() {
                 std::cout << "Exercise updated successfully!\n\n";
                 std::cout << "That is how it looks like now!\n\n";
                 std::cout << "Exercise name: ";
-                exerciseToEdit->displayExerciseInfo();
+                exerciseToEdit->displayExerciseInfoInEditFunction();
 
                 std::cout << "\nPress enter to return to the menu.";
                 std::cin.get();
