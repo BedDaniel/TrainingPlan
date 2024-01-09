@@ -7,8 +7,6 @@
 #include "../Includes/Exercises.hpp"
 #include "../Includes/TrainingDay.hpp"
 
-//#include "../Includes/Menu.hpp"
-
 class TrainingPlan{
 public:
     TrainingPlan(){};

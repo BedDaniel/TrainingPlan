@@ -5,18 +5,143 @@
 #include <stdlib.h>
 #include <limits>
 #include <filesystem>
+#include <cstdlib>
 
-
-void Menu::validateUserInput(size_t & choice){
-    while(!(std::cin>>choice))
-    {
-        std::cout << "\nPlease enter numbers only!\n";
-        std::cin.clear();
-        std::cin.ignore(100, '\n');
-    }
-}
 
 void Menu::clearScreen() { std::cout << "\x1B[2J\x1B[H"; }
+
+void Menu::runMenu(){
+    size_t choice;
+    
+    do
+    {
+        clearScreen();
+        std::cout << "1. Create new training plan\n";
+        std::cout << "2. Load training plan\n\n";
+        std::cout << "0. EXIT\n\n";
+        std::cout << "Insert a number between 0 - 2: ";
+
+        switch (choice)
+        {
+        case 1:
+            runMainMenu();
+            break;
+        case 2:
+            Menu_LoadFromFile();
+            break;
+        case 0:
+            clearScreen();
+            std::cout << "\nPRESS ENTER TO EXIT\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
+        default:
+            clearScreen();
+            std::cout << "You entered a wrong number!\n";
+            std::cout << "Press enter to try again!\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
+        }
+    } while (choice != 0);
+}
+
+void Menu::printMainMenu(){
+    clearScreen();
+    std::cout << "1. Show training plan\n"
+                 "2. Save training plan to a file\n"
+                 "3. Load training plan from a file\n"
+                 "4. Add exercise to training day\n"
+                 "5. Add training day to plan\n"
+                 "6. Remove exercise from training day\n"
+                 "7. Remove training day from plan\n"
+                 "8. Swap exercises in training day\n"
+                 "9. Edit training day in plan\n\n"
+                 "0. EXIT\n";
+}
+
+void Menu::runMainMenu(){
+    size_t choice = 0;
+
+    do
+    {
+        clearScreen();
+        printMainMenu();
+
+        std::cout << "\nInsert a number between 0 - 9: ";
+
+        while (true) {
+            if (std::cin.peek() == '\n') { std::cin.ignore(); }
+
+            if (std::cin >> choice && choice >= 0 && choice <= 9) {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                break;
+            } else {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                clearScreen();
+                printMainMenu();
+                std::cout << "Invalid input. Please enter a number between 0 - 9: ";
+            }
+        }
+        clearScreen();
+
+        switch (choice)
+        {
+        case 0:
+            clearScreen();
+            Menu_exitProgram();
+            break;
+        case 1:
+            Menu_ShowTrainingPlan();
+            break;
+        case 2:
+            Menu_SaveToFile();
+            break;
+        case 3:
+            Menu_LoadFromFile();
+            break;
+        case 4:
+            Menu_AddExerciseToTrainingDay();
+            break;
+        case 5:
+            Menu_AddTrainingday();
+            break;
+        case 6:
+            Menu_RemoveExerciseFromTrainingDay();
+            break;
+        case 7:
+            Menu_RemoveTrainingDay();
+            break;
+        case 8:
+            Menu_SwapExercisesInTrainingDay();
+            break;
+        case 9:
+            Menu_EditExerciseInTrainingDay();
+            break;
+        default:
+            clearScreen();
+            std::cout << "You entered a wrong char!\n";
+            std::cout << "Press enter to try again!\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
+        }
+    } while(choice != 0);
+}
+
+
+
+void Menu::Menu_exitProgram(){
+    char choice;
+    std::cout << "Do you want to save your training plan before exiting? (Y/N): ";
+    std::cin >> choice;
+
+    if (choice == 'Y' or choice == 'y') { Menu_SaveToFile(); }
+
+    std::cout << "\nExiting the program. Have a nice day!\n";
+    exit(0);
+}
 
 void Menu::Menu_SaveToFile() {
     clearScreen();
@@ -68,89 +193,6 @@ void Menu::Menu_SaveToFile() {
     std::cin.get();
 }
 
-
-void Menu::Menu_LoadFromFile2() {
-    clearScreen();
-    std::cout << "!!! Warning!!!\n\nLoading a new training plan will overwrite the current plan.\n\n";
-    std::cout << "Do you want to continue? (Y/N): ";
-
-    char choice;
-    std::cin >> choice;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    if (choice != 'Y' && choice != 'y') 
-    {
-        std::cout << "\nOperation cancelled. Press enter to return to the menu.";
-        std::cin.get();
-        return;
-    }
-
-    std::string filename;
-    std::cout << "\nEnter the filename to load the training plan from (with '.txt' extension): ";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::getline(std::cin, filename);
-
-    std::ifstream inFile(filename);
-    if (!inFile.is_open()) 
-    {
-        std::cout << "Could not open file " << filename << " for reading.\n";
-        std::cout << "Press enter to return to the menu.";
-        std::cin.get();
-        return;
-    }
-
-    plan.clearTrainingDays();
-
-    std::string line;
-    std::string dayName;
-    std::shared_ptr<TrainingDay> currentDay;
-
-    while (std::getline(inFile, line)) 
-    {
-        if (line.starts_with("Day: ")) 
-        {
-            currentDay = std::make_shared<TrainingDay>();
-            std::string dayName = line.substr(5); // Usuwanie "Day: "
-            currentDay->setWorkoutDayName(dayName);
-            plan.makeWorkoutDay(dayName);
-        } 
-
-        else if (line.starts_with("Exercise: ")) 
-        {
-            size_t pos = line.find(", Sets: ");
-            std::string name = line.substr(10, pos - 10);
-            line = line.substr(pos + 8); // Przesunięcie za "Sets: "
-
-            pos = line.find(", Reps: ");
-            size_t sets = std::stoi(line.substr(0, pos));
-            line = line.substr(pos + 8); // Przesunięcie za "Reps: "
-
-            pos = line.find(", Weight: ");
-            size_t reps = std::stoi(line.substr(0, pos));
-            float weight = std::stof(line.substr(pos + 10)); // Przesunięcie za "Weight: "
-
-            currentDay->addExercise(name, sets, reps, weight);
-
-        } 
-        else if (line == "---") 
-        {
-            // End of the training day
-        }
-    }
-
-    std::cout << "Training plan loaded from " << filename << " successfully.\n";
-    std::cout << "Press enter to return to the menu.";
-    std::cin.get();
-}
-
-
-
-
-
-
-
-
-// Do przetestowania!!!
 void Menu::Menu_LoadFromFile() {
     clearScreen();
     std::string directory = "Saved_Training_Plans";
@@ -177,18 +219,6 @@ void Menu::Menu_LoadFromFile() {
     } 
     
     else 
-    {
-        std::cout << "Available training plans:\n";
-        for (const auto& entry : std::filesystem::directory_iterator(dirPath)) 
-        {
-            if (entry.is_regular_file()) 
-            {
-                std::cout << " - " << entry.path().filename() << std::endl;
-            }
-        }
-    }
-
-    if (std::filesystem::exists(dirPath) && !std::filesystem::is_empty(dirPath)) 
     {
         std::cout << "Available training plans:\n";
         int fileIndex = 1;
@@ -222,15 +252,14 @@ void Menu::Menu_LoadFromFile() {
         plan.clearTrainingDays();
         plan.loadFromFile(filePath.string());
 
+        clearScreen();
         std::cout << "Training plan '" << selectedFile << "' loaded successfully.\n";
         std::cout << "Press enter to return to the menu.";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin.get();
+        runMainMenu();
     }
 }
-
-
-
 
 void Menu::Menu_ShowTrainingPlan(){
     char answer;
@@ -462,20 +491,6 @@ void Menu::Menu_AddExerciseToTrainingDay(){
     }
 }
 
-void Menu::printMenu(){
-    clearScreen();
-    std::cout << "1. Show training plan\n"
-                 "2. Save training plan to a file\n"
-                 "3. Load training plan from a file\n"
-                 "4. Add exercise to training day\n"
-                 "5. Add training day to plan\n"
-                 "6. Remove exercise from training day\n"
-                 "7. Remove training day from plan\n"
-                 "8. Swap exercises in training day\n"
-                 "9. Edit training day in plan\n\n"
-                 "0. EXIT\n";
-}
-
 void Menu::Menu_RemoveTrainingDay(){
     clearScreen();
     if (plan.getTrainingDays().empty()) {
@@ -686,7 +701,7 @@ void Menu::Menu_SwapExercisesInTrainingDay() {
 
         selectedDay->swapExercises(firstExerciseChoice - 1, secondExerciseChoice - 1);
         clearScreen();
-        std::cout << "Exercises swapped successfully.\n";
+        std::cout << "Exercises swapped successfully.\n\n";
         std::cout << "This is how your training plan looks like now!\n\n";
         selectedDay->displayTrainingDay();
 
@@ -851,113 +866,4 @@ void Menu::Menu_EditExerciseInTrainingDay() {
 
     // std::cout << "\nPress enter to return to the menu.";
     // std::cin.get();
-}
-
-void Menu::runMainMenu(){
-    size_t choice = 0;
-
-    do
-    {
-        clearScreen();
-        printMenu();
-
-        std::cout << "\nInsert a number between 0 - 9: ";
-
-        while (true) {
-            if (std::cin.peek() == '\n') { std::cin.ignore(); }
-
-            if (std::cin >> choice && choice >= 0 && choice <= 9) {
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                break;
-            } else {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                clearScreen();
-                printMenu();
-                std::cout << "Invalid input. Please enter a number between 0 - 9: ";
-            }
-        }
-        clearScreen();
-
-        switch (choice)
-        {
-        case 0:
-            clearScreen();
-            std::cout << "EXIT!\n";
-            std::cin.get();
-            break;
-        case 1:
-            Menu_ShowTrainingPlan();
-            break;
-        case 2:
-            Menu_SaveToFile();
-            break;
-        case 3:
-            Menu_LoadFromFile();
-            break;
-        case 4:
-            Menu_AddExerciseToTrainingDay();
-            break;
-        case 5:
-            Menu_AddTrainingday();
-            break;
-        case 6:
-            Menu_RemoveExerciseFromTrainingDay();
-            break;
-        case 7:
-            Menu_RemoveTrainingDay();
-            break;
-        case 8:
-            Menu_SwapExercisesInTrainingDay();
-            break;
-        case 9:
-            Menu_EditExerciseInTrainingDay();
-            break;
-        default:
-            clearScreen();
-            std::cout << "You entered a wrong char!\n";
-            std::cout << "Press enter to try again!\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            break;
-        }
-    } while(choice != 0);
-}
-
-void Menu::runMenu(){
-    size_t choice;
-
-    // plan.loadSavedTrainingPlan(); 
-    do
-    {
-        clearScreen();
-        std::cout << "1. Create new training plan\n";
-        std::cout << "2. Load training plan (it will work soon!)\n\n";
-        std::cout << "0. EXIT\n\n";
-        std::cout << "Insert a number between 0 - 2: ";
-        validateUserInput(choice);
-
-        switch (choice)
-        {
-        case 1:
-            runMainMenu();
-            break;
-        case 2:
-            Menu_LoadFromFile();
-            break;
-        case 0:
-            clearScreen();
-            std::cout << "\nPRESS ENTER TO EXIT\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            break;
-        default:
-            clearScreen();
-            std::cout << "You entered a wrong number!\n";
-            std::cout << "Press enter to try again!\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            break;
-        }
-    } while (choice != 0);
 }

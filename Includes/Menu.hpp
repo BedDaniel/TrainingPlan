@@ -6,11 +6,10 @@ public:
     Menu() {};
     void runMenu();
     void runMainMenu();
-    void validateUserInput(size_t & choice);
 
 private:
     TrainingPlan plan;
-    void printMenu();
+    void printMainMenu();
     void clearScreen();
 
     void Menu_ShowTrainingPlan();
@@ -29,6 +28,7 @@ private:
 
     void Menu_SaveToFile();
     void Menu_LoadFromFile();
-    void Menu_LoadFromFile2();
+
+    void Menu_exitProgram();
 
 };
