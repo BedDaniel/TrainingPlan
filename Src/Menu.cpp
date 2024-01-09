@@ -181,37 +181,80 @@ void Menu::Menu_SaveToFile() {
         std::cout << "Press enter to return to the menu.";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return;
-        // std::cin.get();
     }
 
     std::string filename;
     std::string directory = "Saved_Training_Plans";
-
     std::filesystem::path dirPath = std::filesystem::current_path() / directory;
+
     if (!std::filesystem::exists(dirPath)) 
     {
         std::filesystem::create_directory(dirPath);
+    }
+
+    if (!plan.getCurrentFileName().empty()) {
+        char saveCurrentChoice;
+
+        std::filesystem::path currentFilePath(plan.getCurrentFileName());
+        std::string fileNameOnly = currentFilePath.filename().string();
+
+        std::cout << "Do you want to save the training plan under its current name '"
+                  << fileNameOnly << "'? (Y/N): ";
+        std::cin >> saveCurrentChoice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (saveCurrentChoice == 'Y' || saveCurrentChoice == 'y') {
+            std::filesystem::path filePath = dirPath / (plan.getCurrentFileName() + ".txt");
+            plan.saveToFile(filePath.string());
+            clearScreen();
+            std::cout << "Training plan saved to '" << fileNameOnly << ".txt' successfully.\n\n";
+            std::cout << "Press enter to return to the menu.";
+            std::cin.get();
+            return;
+        }
     }
 
     while (true) 
     {
         std::cout << "Enter the filename to save the training plan: "; /* (without '.txt' extension): "; */
         std::getline(std::cin, filename);
+        
+        if (filename.empty()) 
+        {
+            clearScreen();
+            std::cout << "Filename cannot be empty! Please enter a valid filename.\n";
+            continue;
+        }
         std::filesystem::path filePath = dirPath / (filename + ".txt");
-
-        std::ifstream fileCheck(filename);
 
         if (std::filesystem::exists(filePath)) 
         {
             clearScreen();
-            std::cout << "A file named: \n'" << filename << "' already exists. Please choose a different name.\n";
-        } 
+            char overwriteChoice;
+            std::cout << "A file named '" << filename << ".txt' already exists.\n";
+            std::cout << "Do you want to overwrite it? (Y/N): ";
+            std::cin >> overwriteChoice;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            if (overwriteChoice == 'Y' || overwriteChoice == 'y') 
+            {
+                plan.saveToFile(filePath.string());
+                plan.addSavedFileNames(filePath.string());
+                break;
+            } 
+            else 
+            {
+                clearScreen();
+                continue;
+            }
+        }
         else 
         {
             plan.saveToFile(filePath.string());
             plan.addSavedFileNames(filePath.string());
             break;
         }
+
     }
 
     plan.saveToFile(filename);
@@ -221,6 +264,7 @@ void Menu::Menu_SaveToFile() {
     std::cout << "Training plan saved to '" << filename << ".txt' successfully.\n\n";
     std::cout << "Press enter to return to the menu.";
     std::cin.get();
+    runMainMenu();
 }
 
 void Menu::Menu_LoadFromFile() {

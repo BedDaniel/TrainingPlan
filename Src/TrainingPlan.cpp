@@ -35,14 +35,13 @@ void TrainingPlan::removeTrainingDay(int pos) {
     trainingDays_.erase(iteratorToRemove);
 }
 
-void TrainingPlan::saveToFile(const std::string& filename) const {
+void TrainingPlan::saveToFile(const std::string& filename) {
     std::ofstream outFile(filename);
     if (!outFile.is_open()) 
     {
         std::cerr << "Could not open file " << filename << " for writing.\n";
         return;
     }
-
     for (const auto& day : trainingDays_) 
     {
         outFile << "Day: " << day->getWorkoutDayName() << "\n";
@@ -56,6 +55,7 @@ void TrainingPlan::saveToFile(const std::string& filename) const {
         }
         outFile << "---\n";
     }
+    currentFileName_ = filename;
 }
 
 void TrainingPlan::clearTrainingDays(){
@@ -69,7 +69,7 @@ void TrainingPlan::loadFromFile(const std::string& filename) {
         std::cerr << "Could not open file " << filename << " for reading.\n";
         return;
     }
-
+    currentFileName_ = filename;
     std::string line;
 
     while (std::getline(inFile, line)) 
