@@ -1,28 +1,6 @@
 #include "../Includes/TrainingDay.hpp"
 #include <iostream>
 
-// void TrainingDay::displayTrainingDay() const {
-//     int num = 1;
-//     std::cout << "training day: " << workoutDayName_ << "\n";
-    
-//     if (exercises_.empty()) 
-//     {
-//         std::cout << "\nThere is no any exercise in this day.\n";
-//     } 
-//     else 
-//     {   
-//         int num = 1;
-//         std::cout << "\nExercises:\n";
-//         for (const auto& exercise : exercises_) {
-//             // std::cout << num << ". " << exercise->getName() << '\n';
-//             std::cout << num << ". ";
-//             exercise->displayExerciseInfo();
-//             ++num;
-//         }
-//     }
-//     std::cout << "\n------------------------------------------------\n";
-// }
-
 void TrainingDay::displayTrainingDay() const {
     std::cout << "\nTraining day: " << workoutDayName_ << "\n";
 
@@ -32,14 +10,14 @@ void TrainingDay::displayTrainingDay() const {
     } 
     else 
     {
-        std::cout << "---------------------------------------------------------------------------------------------------\n";
+        std::cout << "--------------------------------------------------\n";
         std::cout << std::setw(4)  << std::left << "No."
                   << std::setw(25) << "Exercise Name"
                   << std::setw(7) << "Sets"
                   << std::setw(7) << "Reps"
                   << std::setw(10) << "Weight"
                   << "\n";
-        std::cout << "---------------------------------------------------------------------------------------------------\n";
+        std::cout << "--------------------------------------------------\n";
         int exerciseNumber = 1;
         for (const auto& exercise : exercises_) 
         {

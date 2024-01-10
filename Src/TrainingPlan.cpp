@@ -20,13 +20,10 @@ void TrainingPlan::displayTrainingDays() const {
 
 void TrainingPlan::displayTrainingDaysWithExercises() const {
     int num = 1;
+
     for (const auto& trainingDay : trainingDays_) 
     {   
         trainingDay->displayTrainingDay();
-
-        // std::cout << num << ". ";
-        // trainingDay->displayTrainingDay();
-        // ++num;
     }
 }
 
@@ -42,6 +39,7 @@ void TrainingPlan::saveToFile(const std::string& filename) {
         std::cerr << "Could not open file " << filename << " for writing.\n";
         return;
     }
+    
     for (const auto& day : trainingDays_) 
     {
         outFile << "Day: " << day->getWorkoutDayName() << "\n";
